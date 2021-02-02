@@ -19,3 +19,9 @@ class ReplySerializer(serializers.ModelSerializer):
     class Meta:
         model = Reply
         fields = "__all__"
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = "__all__"

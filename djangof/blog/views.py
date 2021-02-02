@@ -35,3 +35,13 @@ class PostView(APIView):
             post['comment'] = comment_data
             data.append(post)
         return Response(data)
+
+
+class CategoryView(APIView):
+    permission_classes = [IsAuthenticated, ]
+    authentication_classes = [TokenAuthentication, ]
+
+    def get(self, requst):
+        query = Category.objects.all()
+        serializer = CategorySerializer(query, many=True)
+        return Response(serializer.data)

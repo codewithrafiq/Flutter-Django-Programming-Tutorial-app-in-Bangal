@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterd/state/post_state.dart';
+import 'package:flutterd/widgets/single_Post.dart';
+import 'package:flutterd/widgets/single_category.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreens extends StatefulWidget {
@@ -16,6 +18,7 @@ class _HomeScreensState extends State<HomeScreens> {
   @override
   void didChangeDependencies() async {
     if (_init) {
+      Provider.of<PostState>(context, listen: false).getCategoryData();
       _isLoding =
           await Provider.of<PostState>(context, listen: false).getPostData();
       setState(() {});
@@ -27,7 +30,8 @@ class _HomeScreensState extends State<HomeScreens> {
   @override
   Widget build(BuildContext context) {
     final posts = Provider.of<PostState>(context).post;
-    if (_isLoding == false || posts == null)
+    final category = Provider.of<PostState>(context).category;
+    if (_isLoding == false || posts == null || category == null)
       return Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
@@ -39,13 +43,24 @@ class _HomeScreensState extends State<HomeScreens> {
           title: Text("Welcome to Code"),
           centerTitle: true,
         ),
-        body: ListView.builder(
-          itemCount: posts.length,
-          itemBuilder: (ctx, i) {
-            return Card(
-              child: Text(posts[i].title),
-            );
-          },
+        body: Column(
+          children: [
+            Container(
+              height: 45,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: category.length,
+                itemBuilder: (ctx, i) => SingleCategory(category[i]),
+              ),
+            ),
+            Divider(),
+            Expanded(
+              child: ListView.builder(
+                itemCount: posts.length,
+                itemBuilder: (ctx, i) => SinglePost(posts[i]),
+              ),
+            ),
+          ],
         ),
       );
   }

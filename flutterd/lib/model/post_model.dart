@@ -81,7 +81,7 @@ class Comment {
   int id;
   String title;
   String time;
-  int user;
+  User user;
   int post;
   List<Reply> reply;
 
@@ -91,7 +91,7 @@ class Comment {
     id = json['id'];
     title = json['title'];
     time = json['time'];
-    user = json['user'];
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
     post = json['post'];
     if (json['reply'] != null) {
       reply = new List<Reply>();
@@ -106,7 +106,9 @@ class Comment {
     data['id'] = this.id;
     data['title'] = this.title;
     data['time'] = this.time;
-    data['user'] = this.user;
+    if (this.user != null) {
+      data['user'] = this.user.toJson();
+    }
     data['post'] = this.post;
     if (this.reply != null) {
       data['reply'] = this.reply.map((v) => v.toJson()).toList();
@@ -115,11 +117,33 @@ class Comment {
   }
 }
 
+class User {
+  int id;
+  String username;
+  String email;
+
+  User({this.id, this.username, this.email});
+
+  User.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    username = json['username'];
+    email = json['email'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['username'] = this.username;
+    data['email'] = this.email;
+    return data;
+  }
+}
+
 class Reply {
   int id;
   String title;
   String time;
-  int user;
+  User user;
   int comment;
 
   Reply({this.id, this.title, this.time, this.user, this.comment});
@@ -128,7 +152,7 @@ class Reply {
     id = json['id'];
     title = json['title'];
     time = json['time'];
-    user = json['user'];
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
     comment = json['comment'];
   }
 
@@ -137,7 +161,9 @@ class Reply {
     data['id'] = this.id;
     data['title'] = this.title;
     data['time'] = this.time;
-    data['user'] = this.user;
+    if (this.user != null) {
+      data['user'] = this.user.toJson();
+    }
     data['comment'] = this.comment;
     return data;
   }

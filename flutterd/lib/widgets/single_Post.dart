@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutterd/model/post_model.dart';
+import 'package:flutterd/widgets/single_comments.dart';
 
-class SinglePost extends StatelessWidget {
+class SinglePost extends StatefulWidget {
   final Post post;
   SinglePost(this.post);
+
+  @override
+  _SinglePostState createState() => _SinglePostState();
+}
+
+class _SinglePostState extends State<SinglePost> {
+  bool _showComments = false;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -15,7 +23,7 @@ class SinglePost extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  post.title,
+                  widget.post.title,
                   style: TextStyle(
                     fontSize: 18,
                   ),
@@ -23,12 +31,12 @@ class SinglePost extends StatelessWidget {
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
-                    child: Text(post.category.title),
+                    child: Text(widget.post.category.title),
                   ),
                 ),
               ],
             ),
-            if (post.code.length != 0)
+            if (widget.post.code.length != 0)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -45,7 +53,7 @@ class SinglePost extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Text(
-                          post.code,
+                          widget.post.code,
                           style: TextStyle(
                             color: Colors.white,
                           ),
@@ -55,13 +63,13 @@ class SinglePost extends StatelessWidget {
                   ),
                 ],
               ),
-            post.content.length > 100
+            widget.post.content.length > 100
                 ? Container(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "${post.content.substring(0, 100)}...",
+                          "${widget.post.content.substring(0, 100)}...",
                           style: TextStyle(
                             fontSize: 16,
                           ),
@@ -77,12 +85,77 @@ class SinglePost extends StatelessWidget {
                   )
                 : Container(
                     child: Text(
-                      "${post.content}",
+                      "${widget.post.content}",
                       style: TextStyle(
                         fontSize: 16,
                       ),
                     ),
                   ),
+            Divider(),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  FlatButton.icon(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.favorite,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    label: Text(
+                      "Like()",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
+                  FlatButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        _showComments = !_showComments;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.comment,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    label: Text(
+                      "Comment()",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (_showComments)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "Comment...",
+                      ),
+                    ),
+                  ),
+                  Container(
+                    child: Card(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: widget.post.comment
+                            .map(
+                              (e) => SingleComment(e),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                  )
+                ],
+              ),
           ],
         ),
       ),

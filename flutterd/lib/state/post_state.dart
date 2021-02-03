@@ -39,7 +39,7 @@ class PostState with ChangeNotifier {
         headers: {'Authorization': 'token $token'},
       );
       var data = json.decode(response.body) as List;
-      print(data);
+      // print(data);
       List<Category> temp = [];
       data.forEach((element) {
         Category category = Category.fromJson(element);

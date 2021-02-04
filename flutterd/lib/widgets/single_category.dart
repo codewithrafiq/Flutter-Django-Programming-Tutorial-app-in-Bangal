@@ -12,7 +12,12 @@ class SingleCategory extends StatelessWidget {
         color: Theme.of(context).accentColor,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(category.title),
+          child: Text(
+            category.title,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
     );

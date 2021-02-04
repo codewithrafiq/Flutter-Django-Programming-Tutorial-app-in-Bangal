@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutterd/model/post_model.dart';
+import 'package:flutterd/state/post_state.dart';
 import 'package:flutterd/widgets/singleReply.dart';
+import 'package:provider/provider.dart';
 
 class SingleComment extends StatefulWidget {
   final Comment comment;
@@ -11,6 +13,19 @@ class SingleComment extends StatefulWidget {
 
 class _SingleCommentState extends State<SingleComment> {
   bool _showReply = false;
+  final replycontroler = TextEditingController();
+  String replytext = '';
+  void _addreply() {
+    if (replytext.length <= 0) {
+      return;
+    }
+    Provider.of<PostState>(context, listen: false)
+        .addreply(widget.comment.id, replytext);
+    replycontroler.text = '';
+    replytext = '';
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,7 +57,7 @@ class _SingleCommentState extends State<SingleComment> {
                   _showReply = !_showReply;
                 });
               },
-              child: Text("Reply"),
+              child: Text("Reply(${widget.comment.reply.length})"),
             ),
             if (_showReply)
               Container(
@@ -52,7 +67,24 @@ class _SingleCommentState extends State<SingleComment> {
                   children: [
                     Container(
                       child: TextField(
-                        decoration: InputDecoration(hintText: "Reply"),
+                        controller: replycontroler,
+                        onChanged: (v) {
+                          setState(() {
+                            replytext = v;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Reply",
+                          suffix: IconButton(
+                            onPressed: replytext.length <= 0
+                                ? null
+                                : () {
+                                    _addreply();
+                                  },
+                            icon: Icon(Icons.send),
+                            color: Theme.of(context).accentColor,
+                          ),
+                        ),
                       ),
                     ),
                     if (widget.comment.reply.length != 0)

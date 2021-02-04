@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutterd/model/post_model.dart';
+import 'package:flutterd/state/post_state.dart';
 import 'package:flutterd/widgets/single_comments.dart';
+import 'package:provider/provider.dart';
 
 class SinglePost extends StatefulWidget {
   final Post post;
@@ -12,6 +14,20 @@ class SinglePost extends StatefulWidget {
 
 class _SinglePostState extends State<SinglePost> {
   bool _showComments = false;
+  String commenttitle = '';
+  final commentControler = TextEditingController();
+
+  void _addComment() {
+    if (commenttitle.length <= 0) {
+      return;
+    }
+    Provider.of<PostState>(context, listen: false)
+        .addcomment(widget.post.id, commenttitle);
+    commentControler.text = '';
+    commenttitle = '';
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -97,13 +113,16 @@ class _SinglePostState extends State<SinglePost> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   FlatButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      Provider.of<PostState>(context, listen: false)
+                          .addlike(widget.post.id);
+                    },
                     icon: Icon(
-                      Icons.favorite,
+                      widget.post.like ? Icons.favorite : Icons.favorite_border,
                       color: Theme.of(context).accentColor,
                     ),
                     label: Text(
-                      "Like()",
+                      "Like(${widget.post.totallike})",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 17,
@@ -121,7 +140,7 @@ class _SinglePostState extends State<SinglePost> {
                       color: Theme.of(context).accentColor,
                     ),
                     label: Text(
-                      "Comment()",
+                      "Comment(${widget.post.comment.length})",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 17,
@@ -137,8 +156,23 @@ class _SinglePostState extends State<SinglePost> {
                 children: [
                   Container(
                     child: TextField(
+                      controller: commentControler,
+                      onChanged: (v) {
+                        setState(() {
+                          commenttitle = v;
+                        });
+                      },
                       decoration: InputDecoration(
                         hintText: "Comment...",
+                        suffix: IconButton(
+                          onPressed: commenttitle.length <= 0
+                              ? null
+                              : () {
+                                  _addComment();
+                                },
+                          icon: Icon(Icons.send),
+                          color: Theme.of(context).accentColor,
+                        ),
                       ),
                     ),
                   ),

@@ -118,3 +118,12 @@ class AddReply(APIView):
         except:
             response_msg = {'error': False}
         return Response(response_msg)
+
+
+class Registernow(APIView):
+    def post(sefl, request):
+        serializers = UserSerializers(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response({'error': False})
+        return Response({'error': True})

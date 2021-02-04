@@ -3,14 +3,17 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutterd/model/post_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:localstorage/localstorage.dart';
 
 class PostState with ChangeNotifier {
   List<Post> _posts;
   List<Category> _category;
 
+  LocalStorage storage = LocalStorage("usertoken");
+
   Future<bool> getPostData() async {
     try {
-      var token = 'f0eaa1078a8b143b6ab90a598dbc41234a94978b';
+      var token = storage.getItem('token');
       String url = 'http://10.0.2.2:8000/api/posts/';
       http.Response response =
           await http.get(url, headers: {'Authorization': 'token $token'});
@@ -32,7 +35,7 @@ class PostState with ChangeNotifier {
 
   Future<void> getCategoryData() async {
     try {
-      var token = 'f0eaa1078a8b143b6ab90a598dbc41234a94978b';
+      var token = storage.getItem('token');
       String url = 'http://10.0.2.2:8000/api/categorys/';
       http.Response response = await http.get(
         url,
@@ -55,7 +58,7 @@ class PostState with ChangeNotifier {
 
   Future<void> addlike(int id) async {
     try {
-      var token = 'f0eaa1078a8b143b6ab90a598dbc41234a94978b';
+      var token = storage.getItem('token');
       String url = 'http://10.0.2.2:8000/api/addlike/';
       http.Response response = await http.post(
         url,
@@ -79,7 +82,7 @@ class PostState with ChangeNotifier {
 
   Future<void> addcomment(int postid, String commenttext) async {
     try {
-      var token = 'f0eaa1078a8b143b6ab90a598dbc41234a94978b';
+      var token = storage.getItem('token');
       String url = 'http://10.0.2.2:8000/api/addcomment/';
       http.Response response = await http.post(
         url,
@@ -104,7 +107,7 @@ class PostState with ChangeNotifier {
 
   Future<void> addreply(int commentid, String replytext) async {
     try {
-      var token = 'f0eaa1078a8b143b6ab90a598dbc41234a94978b';
+      var token = storage.getItem('token');
       String url = 'http://10.0.2.2:8000/api/addreply/';
       http.Response response = await http.post(
         url,
@@ -125,6 +128,59 @@ class PostState with ChangeNotifier {
     } catch (e) {
       print("error addreply");
       print(e);
+    }
+  }
+
+  Future<bool> loginNow(String username, String password) async {
+    try {
+      String url = 'http://10.0.2.2:8000/api/login/';
+      http.Response response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: json.encode({
+          'username': username,
+          'password': password,
+        }),
+      );
+      var data = json.decode(response.body) as Map;
+      // print(data);
+      if (data.containsKey('token')) {
+        storage.setItem('token', data['token']);
+        // print(storage.getItem('token'));
+        return false;
+      }
+      return true;
+    } catch (e) {
+      print("error loginnow");
+      print(e);
+      return true;
+    }
+  }
+
+  Future<bool> registerNow(String username, String password) async {
+    try {
+      String url = 'http://10.0.2.2:8000/api/register/';
+      http.Response response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: json.encode({
+          'username': username,
+          'password': password,
+        }),
+      );
+      var data = json.decode(response.body) as Map;
+      // if (data['error'] = false) {
+      //   return false;
+      // }
+      return data['error'];
+    } catch (e) {
+      print("error register now");
+      print(e);
+      return true;
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterd/state/post_state.dart';
+import 'package:flutterd/widgets/app_drower.dart';
 import 'package:flutterd/widgets/single_Post.dart';
 import 'package:flutterd/widgets/single_category.dart';
 import 'package:provider/provider.dart';
@@ -39,6 +40,7 @@ class _HomeScreensState extends State<HomeScreens> {
       );
     else
       return Scaffold(
+        drawer: AddDrower(),
         appBar: AppBar(
           title: Text("Welcome to Code"),
           centerTitle: true,

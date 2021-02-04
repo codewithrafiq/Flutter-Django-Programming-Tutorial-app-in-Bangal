@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutterd/screens/category_screens.dart';
 import 'package:flutterd/screens/home_screens.dart';
+import 'package:flutterd/screens/post_details_screens.dart';
 import 'package:flutterd/state/post_state.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +21,8 @@ class MyApp extends StatelessWidget {
         home: HomeScreens(),
         routes: {
           HomeScreens.routeName: (ctx) => HomeScreens(),
+          PostDetailsScreens.routeName: (ctx) => PostDetailsScreens(),
+          CategoryScreens.routeName: (ctx) => CategoryScreens(),
         },
       ),
     );

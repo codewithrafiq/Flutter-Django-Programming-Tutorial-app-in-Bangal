@@ -141,4 +141,12 @@ class PostState with ChangeNotifier {
     }
     return null;
   }
+
+  Post singlePost(int id) {
+    return _posts.firstWhere((element) => element.id == id);
+  }
+
+  List<Post> categoryposts(int id) {
+    return [..._posts.where((element) => element.category.id == id)];
+  }
 }

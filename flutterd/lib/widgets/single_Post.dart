@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterd/model/post_model.dart';
+import 'package:flutterd/screens/category_screens.dart';
+import 'package:flutterd/screens/post_details_screens.dart';
 import 'package:flutterd/state/post_state.dart';
 import 'package:flutterd/widgets/single_comments.dart';
 import 'package:provider/provider.dart';
@@ -38,16 +40,32 @@ class _SinglePostState extends State<SinglePost> {
           children: [
             Row(
               children: [
-                Text(
-                  widget.post.title,
-                  style: TextStyle(
-                    fontSize: 18,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                      PostDetailsScreens.routeName,
+                      arguments: widget.post.id,
+                    );
+                  },
+                  child: Text(
+                    widget.post.title,
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
                   ),
                 ),
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: Text(widget.post.category.title),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                      CategoryScreens.routeName,
+                      arguments: widget.post.category.id,
+                    );
+                  },
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Text(widget.post.category.title),
+                    ),
                   ),
                 ),
               ],
@@ -90,10 +108,18 @@ class _SinglePostState extends State<SinglePost> {
                             fontSize: 16,
                           ),
                         ),
-                        Text(
-                          "Read More",
-                          style: TextStyle(
-                            color: Colors.red,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                              PostDetailsScreens.routeName,
+                              arguments: widget.post.id,
+                            );
+                          },
+                          child: Text(
+                            "Read More",
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
                           ),
                         ),
                       ],

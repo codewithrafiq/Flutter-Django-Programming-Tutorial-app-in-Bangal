@@ -8,3 +8,4 @@
 ## [🔥🔥Part-5](https://github.com/codewithrafiq/Flutter-Django-Programming-Tutorial-app-in-Bangal/tree/92f74780c95bc0304f927590f4f5729fc21cb634)
 ## [🔥🔥Part-6](https://github.com/codewithrafiq/Flutter-Django-Programming-Tutorial-app-in-Bangal/tree/440587fc4e49d94d56629106383d5d9ccd191050)
 ## [🔥🔥Part-7](https://github.com/codewithrafiq/Flutter-Django-Programming-Tutorial-app-in-Bangal/tree/df4770aff3bc3dc9b41688da67c61140eabbc952)
+## [🔥🔥Part-8-End Project](https://github.com/codewithrafiq/Flutter-Django-Programming-Tutorial-app-in-Bangal/tree/cccfc1fd1505ee7c2b88f62b68331dc6967c819c)
